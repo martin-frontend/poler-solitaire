@@ -1,10 +1,13 @@
 <template>
   <div class="container">
-    <Card v-for="(_, index) of 9" :index="index" name="spade-1" />
+    <Card v-for="(name, index) of cards" :index="index" :name="name" />
   </div>
 </template>
 <script lang="ts" setup>
 import Card from "@/components/Card.vue";
+import { useCards } from "@/modules/game";
+
+const cards = useCards();
 </script>
 <style lang="scss" scoped>
 .container {
