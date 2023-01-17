@@ -1,4 +1,4 @@
-import { onMounted, reactive } from "vue";
+import { onMounted, reactive, ref, nextTick } from "vue";
 
 export enum CardName {
   CLUB = "club",
@@ -7,14 +7,13 @@ export enum CardName {
   SPADE = "spade",
 }
 
-export const randomArr = (arr: string[]) => {
-  arr.sort(function () {
-    return 0.5 - Math.random();
-  });
-};
+const renderComponent = ref(false);
+
+const cards = reactive<string[]>([]);
 
 // 初始化52張牌
-export const initCards = (arr: string[]) => {
+const initCards = () => {
+  cards.length = 0;
   // 花色
   const colors = [
     CardName.SPADE,
@@ -27,19 +26,30 @@ export const initCards = (arr: string[]) => {
   colors.forEach((color) => {
     let i = 1;
     while (i <= count) {
-      arr.push(color + "-" + i);
+      cards.push(color + "-" + i);
       i++;
     }
   });
 };
 
-const cards = reactive<string[]>([]);
+export const randomCards = () => {
+  cards.sort(function () {
+    return 0.5 - Math.random();
+  });
+};
+
+export const startGame = async () => {
+  renderComponent.value = true;
+  await nextTick();
+  initCards();
+  randomCards();
+  renderComponent.value = false;
+};
 
 export const useCards = () => {
   onMounted(() => {
-    initCards(cards);
-    randomArr(cards);
+    startGame();
   });
 
-  return cards;
+  return { cards, renderComponent };
 };
