@@ -10,6 +10,6 @@
 import Card from "@/components/Card.vue";
 import Card2 from "@/components/Card2.vue";
 import { useCards, startGame, randomCards } from "@/modules/game";
-const { cards, renderComponent } = useCards();
+const { cards, renderComponent, cardsMartix } = useCards();
 </script>
 <style lang="scss" scoped></style>

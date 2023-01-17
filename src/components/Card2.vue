@@ -5,7 +5,7 @@
     :style="[image, draggableStyle]"
     :class="{
       'pointer-unset': isCanMove,
-      'z-index-999': isDragging,
+      'z-index-999': isDragging || (isUseTransition && isCanMove),
       transition: isUseTransition,
     }"
   ></div>
@@ -14,7 +14,7 @@
 import { computed, onMounted, ref } from "vue";
 import { useDraggable } from "@vueuse/core";
 
-const moveTime = ref(300);
+const moveTime = ref(500);
 const delayTime = ref(100);
 const moveTimeS = `${moveTime.value / 1000}s`;
 
@@ -39,8 +39,9 @@ const distanceY = 50;
 const image = "background-image: url(/src/assets/card/" + props.name + ".png);";
 
 const onEnd = () => {
-  index.value = 52;
+  // index.value = 52;
   setPosition();
+  closeTransition();
 };
 
 const {
@@ -49,8 +50,8 @@ const {
   isDragging,
 } = useDraggable(el, {
   initialValue: {
-    x: 100,
-    y: 100,
+    x: 500,
+    y: 400,
   },
   onEnd,
 });
@@ -95,6 +96,7 @@ onMounted(() => {
   pointer-events: none;
   color: black;
   background-size: contain;
+  overflow: hidden;
   &:hover {
     box-shadow: 10px 5px 5px black;
   }
@@ -109,6 +111,6 @@ onMounted(() => {
 }
 
 .transition {
-  transition: all v-bind(moveTimeS);
+  transition: all v-bind(moveTimeS) ease-out;
 }
 </style>

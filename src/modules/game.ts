@@ -10,6 +10,7 @@ export enum CardName {
 const renderComponent = ref(false);
 
 const cards = reactive<string[]>([]);
+const cardsMartix = reactive<string[][]>([[],[],[],[],[],[],[],[]]);
 
 // 初始化52張牌
 const initCards = () => {
@@ -30,6 +31,11 @@ const initCards = () => {
       i++;
     }
   });
+  randomCards();
+
+  cards.forEach((card, index) => {
+    cardsMartix[index % 8].push(card);
+  });
 };
 
 export const randomCards = () => {
@@ -42,7 +48,6 @@ export const startGame = async () => {
   renderComponent.value = true;
   await nextTick();
   initCards();
-  randomCards();
   renderComponent.value = false;
 };
 
@@ -51,5 +56,5 @@ export const useCards = () => {
     startGame();
   });
 
-  return { cards, renderComponent };
+  return { cards, renderComponent, cardsMartix };
 };
